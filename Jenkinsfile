@@ -5,7 +5,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'deploy', url: 'https://github.com/turingOps/crud-app/tree/deploy'
+                git branch: 'deploy', url: 'https://github.com/turingOps/crud-app.git'
             }
         }
 
