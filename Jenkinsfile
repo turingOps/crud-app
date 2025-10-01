@@ -1,6 +1,10 @@
 pipeline {
     
     agent any
+    environment {
+        IMAGE_NAME = 'marshkelvin0/crud-app'
+        IMAGE_TAG = '${IMAGE_NAME}:${env.GIT_COMMIT}'
+    }
     tools {
         nodejs 'node-24'
     }
@@ -18,10 +22,33 @@ pipeline {
             }
         }
 
-        stage('Build') {
+
+        stage('Login to Docker Hub') {
             steps {
-                sh 'npm start'
+                withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
+                    sh 'echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin echo "Logged in to Docker Hub"'
+                }
             }
         }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    sh 'docker build -t ${IMAGE_TAG} .'
+                    echo "Built Docker image: ${IMAGE_TAG}"
+                    sh 'docker image ls'
+                }
+            }
+        }
+
+        stage('Push Docker Image') {
+            steps {
+                script {
+                    sh 'docker push ${IMAGE_TAG}'
+                    echo "Pushed Docker image: ${IMAGE_TAG}"
+                }
+            }
+        }
+        
     }
 }
