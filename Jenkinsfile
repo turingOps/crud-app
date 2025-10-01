@@ -1,12 +1,6 @@
 pipeline {
     
-    agent {
-        docker {
-            image 'node:18-alpine'
-            args '-u root:root'  // allow npm to install globally if needed
-        }
-    
-    }
+    agent any
 
     stages {
         stage('Install Dependencies') {
