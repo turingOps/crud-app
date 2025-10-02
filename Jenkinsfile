@@ -35,8 +35,8 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh 'docker build -t ${IMAGE_TAG} .'
-                    echo "Built Docker image: ${IMAGE_TAG}"
+                    sh "docker build -t ${IMAGE_NAME}:${env.GIT_COMMIT} ."
+                    sh 'echo "Built Docker image: ${IMAGE_TAG}"'
                     sh 'docker image ls'
                 }
             }
@@ -45,8 +45,8 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    sh 'docker push ${IMAGE_TAG}'
-                    echo "Pushed Docker image: ${IMAGE_TAG}"
+                    sh "docker push ${IMAGE_TAG}"
+                   sh 'echo "Pushed Docker image: ${IMAGE_TAG}"'
                 }
             }
         }
