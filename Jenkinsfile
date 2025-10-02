@@ -45,7 +45,8 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    sh "docker push ${IMAGE_TAG}"
+                    sh "docker push ${IMAGE_NAME}:${env.GIT_COMMIT}"
+
                    sh 'echo "Pushed Docker image: ${IMAGE_TAG}"'
                 }
             }
